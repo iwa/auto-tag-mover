@@ -16,18 +16,14 @@ export interface ExcludedFolder {
 }
 
 export interface AutoNoteMoverSettings {
-	trigger_auto_manual: string;
 	use_regex_to_check_for_tags: boolean;
-	statusBar_trigger_indicator: boolean;
 	folder_tag_pattern: Array<FolderTagPattern>;
 	use_regex_to_check_for_excluded_folder: boolean;
 	excluded_folder: Array<ExcludedFolder>;
 }
 
 export const DEFAULT_SETTINGS: AutoNoteMoverSettings = {
-	trigger_auto_manual: 'Automatic',
 	use_regex_to_check_for_tags: false,
-	statusBar_trigger_indicator: true,
 	folder_tag_pattern: [{ folder: '', tag: '', pattern: '' }],
 	use_regex_to_check_for_excluded_folder: false,
 	excluded_folder: [{ folder: '' }],
@@ -74,35 +70,6 @@ export class AutoNoteMoverSettingTab extends PluginSettingTab {
 		if (!this.plugin.settings.enable_auto_note_mover) {
 			return;
 		} */
-
-		const triggerDesc = document.createDocumentFragment();
-		triggerDesc.append(
-			'Choose how the trigger will be activated.',
-			descEl.createEl('br'),
-			descEl.createEl('strong', { text: 'Automatic ' }),
-			'is triggered when you create, edit, or rename a note, and moves the note if it matches the rules.',
-			descEl.createEl('br'),
-			'You can also activate the trigger with a command.',
-			descEl.createEl('br'),
-			descEl.createEl('strong', { text: 'Manual ' }),
-			'will not automatically move notes.',
-			descEl.createEl('br'),
-			'You can trigger by command.'
-		);
-		new Setting(this.containerEl)
-			.setName('Trigger')
-			.setDesc(triggerDesc)
-			.addDropdown((dropDown) =>
-				dropDown
-					.addOption('Automatic', 'Automatic')
-					.addOption('Manual', 'Manual')
-					.setValue(this.plugin.settings.trigger_auto_manual)
-					.onChange((value: string) => {
-						this.plugin.settings.trigger_auto_manual = value;
-						this.plugin.saveData(this.plugin.settings);
-						this.display();
-					})
-			);
 
 		const useRegexToCheckForTags = document.createDocumentFragment();
 		useRegexToCheckForTags.append(
@@ -343,24 +310,5 @@ export class AutoNoteMoverSettingTab extends PluginSettingTab {
 				});
 			s.infoEl.remove();
 		});
-
-		const statusBarTriggerIndicatorDesc = document.createDocumentFragment();
-		statusBarTriggerIndicatorDesc.append(
-			'The status bar will display [A] if the trigger is Automatic, and [M] for Manual.',
-			descEl.createEl('br'),
-			'To change the setting, you need to restart Obsidian.',
-			descEl.createEl('br'),
-			'Desktop only.'
-		);
-		new Setting(this.containerEl)
-			.setName('Status Bar Trigger Indicator')
-			.setDesc(statusBarTriggerIndicatorDesc)
-			.addToggle((toggle) => {
-				toggle.setValue(this.plugin.settings.statusBar_trigger_indicator).onChange(async (value) => {
-					this.plugin.settings.statusBar_trigger_indicator = value;
-					await this.plugin.saveSettings();
-					this.display();
-				});
-			});
 	}
 }
