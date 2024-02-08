@@ -6,5 +6,5 @@
 	"description": "Auto Tag Mover will automatically move the active notes to their respective folders according to the rules.",
 	"author": "iwa",
 	"authorUrl": "https://github.com/iwa/",
-	"isDesktopOnly": true
+	"isDesktopOnly": false
 }
